@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MaterialExpense, TradeType } from '../types';
-import { X, Check, PackagePlus } from 'lucide-react';
+import { X, Check, PackagePlus, Sparkles } from 'lucide-react';
 
 interface MaterialModalProps {
   onSave: (material: MaterialExpense) => void;
@@ -22,6 +22,15 @@ const TRADES: TradeType[] = [
 
 const UNITS = ['شيكارة', 'لفة', 'متر', 'بستلة', 'لوح', 'قطعة', 'طن', 'مقطورة', 'طلبية كاملة'];
 
+const COMMON_MATERIALS_BY_TRADE: Record<string, string[]> = {
+  'كهرباء': ['سلك سويدي معتمد 2.5 مم', 'سلك سويدي 4 مم للتكييف', 'علب ماجيك وشاسيهات', 'مفاتيح وبرايز فينوس أو بتشينو', 'خراطيم فلتر سويدي'],
+  'سباكة': ['مواسير مياه بوليب بروبلين معتمدة', 'محابس دفن إيطالي', 'مواسير صرف 3 بوصة', 'شيكارة عزل سيكا 107', 'سيفون دفن جيربرت'],
+  'سيراميك وبورسلين': ['سيراميك أرضيات فرز أول', 'سيراميك حوائط حمام ومطبخ', 'شكاير مادة لصق سيراميك', 'صلبان فواصل وعراميس', 'شكاير أسمنت أبيض للترويبة'],
+  'جبس بورد': ['ألواح جبس بورد أخضر مقاوم للرطوبة', 'صاج وزوايا وأوميجا مجلفنة', 'شاش وفيبر وعجينة فواصل', 'مسامير جبس بورد سريعة'],
+  'نقاشة': ['بستلات سيلر مائي مقاوم للرطوبة', 'شكاير معجون حوائط سايبس أو جوتن', 'بستلات دهان بلاستيك نصف لامع', 'رولات وفراشي وصنفرة دائرية'],
+  'محارة وبناء': ['ألف طوبة أسمنتي مصمت', 'نقلة رمل حرش ناعم', 'طن أسمنت بورتلاندي عادي', 'سلك شبك فواصل وفليكس'],
+};
+
 // Convert any Arabic-Indic numerals or formatted numbers to clean standard digits
 const normalizeArabicNumbers = (val: string | number): string => {
   return String(val ?? '')
@@ -33,9 +42,9 @@ const normalizeArabicNumbers = (val: string | number): string => {
 export const MaterialModal: React.FC<MaterialModalProps> = ({ onSave, onClose }) => {
   const [trade, setTrade] = useState<TradeType>('كهرباء');
   const [itemName, setItemName] = useState('');
-  const [quantity, setQuantity] = useState<string | number>(1);
+  const [quantity, setQuantity] = useState<string>('1');
   const [unit, setUnit] = useState<string>('لفة');
-  const [unitPrice, setUnitPrice] = useState<string | number>(500);
+  const [unitPrice, setUnitPrice] = useState<string>('500');
   const [supplierName, setSupplierName] = useState('');
   const [supplierPhone, setSupplierPhone] = useState('');
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
@@ -46,6 +55,8 @@ export const MaterialModal: React.FC<MaterialModalProps> = ({ onSave, onClose })
   const numPrice = parseFloat(normalizeArabicNumbers(unitPrice)) || 0;
   const totalAmount = numQty * numPrice;
 
+  const quickMaterials = COMMON_MATERIALS_BY_TRADE[trade] || [];
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!itemName.trim()) {
@@ -53,8 +64,15 @@ export const MaterialModal: React.FC<MaterialModalProps> = ({ onSave, onClose })
       return;
     }
 
-    if (numQty <= 0) {
+    const cleanQty = parseFloat(normalizeArabicNumbers(quantity));
+    if (isNaN(cleanQty) || cleanQty <= 0) {
       alert('يرجى إدخال كمية صحيحة أكبر من صفر');
+      return;
+    }
+
+    const cleanPrice = parseFloat(normalizeArabicNumbers(unitPrice));
+    if (isNaN(cleanPrice) || cleanPrice < 0) {
+      alert('يرجى إدخال سعر صحيح');
       return;
     }
 
@@ -62,10 +80,10 @@ export const MaterialModal: React.FC<MaterialModalProps> = ({ onSave, onClose })
       id: `m-${Date.now()}`,
       trade,
       itemName: itemName.trim(),
-      quantity: numQty,
+      quantity: cleanQty,
       unit,
-      unitPrice: numPrice,
-      totalAmount,
+      unitPrice: cleanPrice,
+      totalAmount: cleanQty * cleanPrice,
       supplierName: supplierName.trim() || 'محل تجاري',
       supplierPhone: supplierPhone.trim() || undefined,
       date,
@@ -118,7 +136,7 @@ export const MaterialModal: React.FC<MaterialModalProps> = ({ onSave, onClose })
 
             <div>
               <label className="block text-xs font-medium text-neutral-300 mb-1">
-                تاريخ الشراء:
+                تاريخ الشراء / التوريد:
               </label>
               <input
                 type="date"
@@ -131,17 +149,39 @@ export const MaterialModal: React.FC<MaterialModalProps> = ({ onSave, onClose })
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-neutral-300 mb-1">
-              اسم الخامة / الصنف والمواصفات:
-            </label>
+            <div className="flex items-center justify-between mb-1">
+              <label className="text-xs font-medium text-neutral-300">
+                اسم الخامة / الصنف والمواصفات:
+              </label>
+              {quickMaterials.length > 0 && (
+                <span className="text-[10px] text-amber-400 flex items-center gap-1 font-medium">
+                  <Sparkles className="w-3 h-3" /> اقتراحات شائعة
+                </span>
+              )}
+            </div>
             <input
               type="text"
               required
               value={itemName}
               onChange={(e) => setItemName(e.target.value)}
               placeholder="مثلاً: سلك سويدي معتمد 2.5 مم أصلي"
-              className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2 text-base sm:text-sm text-white focus:outline-hidden focus:border-amber-500"
+              className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2 text-base sm:text-sm text-white focus:outline-hidden focus:border-amber-500 mb-2"
             />
+            {/* Quick Material Suggestions Chips */}
+            {quickMaterials.length > 0 && (
+              <div className="flex flex-wrap gap-1.5">
+                {quickMaterials.map((mat) => (
+                  <button
+                    type="button"
+                    key={mat}
+                    onClick={() => setItemName(mat)}
+                    className="text-[10px] sm:text-[11px] px-2 py-1 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-neutral-300 border border-neutral-700 transition-colors cursor-pointer"
+                  >
+                    {mat}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-3 gap-2 sm:gap-3">
@@ -150,13 +190,12 @@ export const MaterialModal: React.FC<MaterialModalProps> = ({ onSave, onClose })
                 الكمية:
               </label>
               <input
-                type="number"
+                type="text"
                 inputMode="decimal"
-                min="0.001"
-                step="any"
                 required
                 value={quantity}
-                onChange={(e) => setQuantity(e.target.value)}
+                onChange={(e) => setQuantity(normalizeArabicNumbers(e.target.value))}
+                placeholder="1"
                 className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3 py-2 text-base sm:text-sm text-white focus:outline-hidden focus:border-amber-500 font-mono tabular-nums text-left"
               />
             </div>
@@ -183,13 +222,12 @@ export const MaterialModal: React.FC<MaterialModalProps> = ({ onSave, onClose })
                 سعر الوحدة (ج.م):
               </label>
               <input
-                type="number"
+                type="text"
                 inputMode="decimal"
-                min="0"
-                step="any"
                 required
                 value={unitPrice}
-                onChange={(e) => setUnitPrice(e.target.value)}
+                onChange={(e) => setUnitPrice(normalizeArabicNumbers(e.target.value))}
+                placeholder="500"
                 className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3 py-2 text-base sm:text-sm text-white focus:outline-hidden focus:border-amber-500 font-mono tabular-nums text-left"
               />
             </div>
@@ -206,13 +244,13 @@ export const MaterialModal: React.FC<MaterialModalProps> = ({ onSave, onClose })
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <div>
               <label className="block text-xs font-medium text-neutral-300 mb-1">
-                اسم المحل / التاجر:
+                اسم المحل / الموان / التاجر:
               </label>
               <input
                 type="text"
                 value={supplierName}
                 onChange={(e) => setSupplierName(e.target.value)}
-                placeholder="مثلاً: أولاد رجب للمواد البنائية"
+                placeholder="مثلاً: أولاد رجب لمواد البناء"
                 className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2 text-base sm:text-sm text-white focus:outline-hidden focus:border-amber-500"
               />
             </div>
@@ -223,8 +261,9 @@ export const MaterialModal: React.FC<MaterialModalProps> = ({ onSave, onClose })
               </label>
               <input
                 type="tel"
+                inputMode="tel"
                 value={supplierPhone}
-                onChange={(e) => setSupplierPhone(e.target.value)}
+                onChange={(e) => setSupplierPhone(normalizeArabicNumbers(e.target.value))}
                 placeholder="010xxxxxxxx"
                 className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2 text-base sm:text-sm text-white focus:outline-hidden focus:border-amber-500 font-mono text-left"
               />

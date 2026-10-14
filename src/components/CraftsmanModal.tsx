@@ -156,12 +156,10 @@ export const CraftsmanModal: React.FC<CraftsmanModalProps> = ({
                 المصنعية الإجمالية المتفق عليها (ج.م):
               </label>
               <input
-                type="number"
+                type="text"
                 inputMode="decimal"
-                min="0"
-                step="any"
                 value={agreedAmount}
-                onChange={(e) => setAgreedAmount(e.target.value)}
+                onChange={(e) => setAgreedAmount(normalizeArabicNumbers(e.target.value))}
                 placeholder="20000"
                 className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2 text-base sm:text-sm text-white focus:outline-hidden focus:border-amber-500 font-mono tabular-nums text-left"
               />
@@ -193,9 +191,10 @@ export const CraftsmanModal: React.FC<CraftsmanModalProps> = ({
               <input
                 type="number"
                 min="0"
-                max="10"
+                max="20"
+                step="any"
                 value={assistantCount}
-                onChange={(e) => setAssistantCount(Number(e.target.value))}
+                onChange={(e) => setAssistantCount(Number(e.target.value) || 0)}
                 className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2 text-base sm:text-sm text-white focus:outline-hidden focus:border-amber-500 font-mono tabular-nums text-left"
               />
             </div>

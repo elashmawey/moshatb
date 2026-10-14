@@ -205,13 +205,11 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                   مبلغ الدفعة أو العربون (ج.م):
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   inputMode="decimal"
-                  min="0.01"
-                  step="any"
                   required
                   value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
+                  onChange={(e) => setAmount(normalizeArabicNumbers(e.target.value))}
                   placeholder="مثلاً: 5000"
                   className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2 text-base sm:text-sm text-white focus:outline-hidden focus:border-emerald-500 font-mono tabular-nums text-left"
                 />
