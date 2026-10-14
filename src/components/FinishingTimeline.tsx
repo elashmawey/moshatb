@@ -155,16 +155,16 @@ export const FinishingTimeline: React.FC<FinishingTimelineProps> = ({
                 <div className="px-5 pb-6 pt-2 border-t border-neutral-800/80 space-y-5 bg-neutral-950/40">
                   
                   {/* Status Switcher */}
-                  <div className="flex items-center justify-between p-3 bg-neutral-900 rounded-xl border border-neutral-800">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 p-3 bg-neutral-900 rounded-xl border border-neutral-800">
                     <span className="text-xs text-neutral-300 font-medium">
                       تحديث حالة هذه المرحلة:
                     </span>
-                    <div className="flex items-center gap-1.5">
+                    <div className="grid grid-cols-3 sm:flex sm:items-center gap-1.5 w-full sm:w-auto">
                       {(['لم تبدأ', 'قيد التنفيذ', 'تم الاستلام'] as const).map((st) => (
                         <button
                           key={st}
                           onClick={() => onUpdateStageStatus(stage.id, st)}
-                          className={`px-3 py-1.5 text-xs rounded-lg transition-all cursor-pointer ${
+                          className={`px-2.5 sm:px-3 py-1.5 text-xs rounded-lg transition-all cursor-pointer text-center justify-center flex items-center ${
                             stage.status === st
                               ? st === 'تم الاستلام'
                                 ? 'bg-emerald-500 text-neutral-950 font-bold'

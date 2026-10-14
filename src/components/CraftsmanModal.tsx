@@ -70,28 +70,29 @@ export const CraftsmanModal: React.FC<CraftsmanModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-xs">
-      <div className="relative w-full max-w-lg bg-neutral-900 border border-neutral-700 rounded-2xl shadow-2xl overflow-hidden text-neutral-100 max-h-[90vh] flex flex-col animate-in fade-in zoom-in-95 duration-150">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-2 sm:p-4 bg-black/75 backdrop-blur-xs">
+      <div className="relative w-full max-w-lg bg-neutral-900 border border-neutral-700 rounded-t-3xl sm:rounded-2xl shadow-2xl overflow-hidden text-neutral-100 max-h-[92dvh] flex flex-col animate-in fade-in zoom-in-95 duration-150">
         
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-800 bg-neutral-900">
+        <div className="flex items-center justify-between px-4 sm:px-6 py-3.5 sm:py-4 border-b border-neutral-800 bg-neutral-900">
           <div className="flex items-center gap-2">
             <HardHat className="w-5 h-5 text-amber-400" />
-            <h3 className="text-base font-semibold text-white">
+            <h3 className="text-sm sm:text-base font-semibold text-white">
               {craftsman ? 'تعديل بيانات الصنايعي' : 'إضافة صنايعي جديد'}
             </h3>
           </div>
           <button
             onClick={onClose}
             className="p-1.5 text-neutral-400 hover:text-white rounded-lg hover:bg-neutral-800 transition-colors cursor-pointer"
+            aria-label="إغلاق"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Scrollable Form */}
-        <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <form onSubmit={handleSubmit} className="p-4 sm:p-6 overflow-y-auto space-y-3.5 sm:space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <div>
               <label className="block text-xs font-medium text-neutral-300 mb-1">
                 اسم الصنايعي / المقاول:
@@ -102,7 +103,7 @@ export const CraftsmanModal: React.FC<CraftsmanModalProps> = ({
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="مثلاً: الأسطى محروس"
-                className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-hidden focus:border-amber-500"
+                className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2 text-base sm:text-sm text-white focus:outline-hidden focus:border-amber-500"
               />
             </div>
 
@@ -113,7 +114,7 @@ export const CraftsmanModal: React.FC<CraftsmanModalProps> = ({
               <select
                 value={trade}
                 onChange={(e) => setTrade(e.target.value as TradeType)}
-                className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-hidden focus:border-amber-500"
+                className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2 text-base sm:text-sm text-white focus:outline-hidden focus:border-amber-500"
               >
                 {TRADES.map((t) => (
                   <option key={t} value={t}>
@@ -124,7 +125,7 @@ export const CraftsmanModal: React.FC<CraftsmanModalProps> = ({
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <div>
               <label className="block text-xs font-medium text-neutral-300 mb-1">
                 رقم الهاتف (واتساب):
@@ -134,7 +135,7 @@ export const CraftsmanModal: React.FC<CraftsmanModalProps> = ({
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="01012345678"
-                className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-hidden focus:border-amber-500 font-mono text-left"
+                className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2 text-base sm:text-sm text-white focus:outline-hidden focus:border-amber-500 font-mono text-left"
               />
             </div>
 
@@ -149,12 +150,12 @@ export const CraftsmanModal: React.FC<CraftsmanModalProps> = ({
                 value={agreedAmount}
                 onChange={(e) => setAgreedAmount(Number(e.target.value))}
                 placeholder="20000"
-                className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-hidden focus:border-amber-500 font-mono tabular-nums text-left"
+                className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2 text-base sm:text-sm text-white focus:outline-hidden focus:border-amber-500 font-mono tabular-nums text-left"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <div>
               <label className="block text-xs font-medium text-neutral-300 mb-1">
                 حالة العمل الحالية:
@@ -162,7 +163,7 @@ export const CraftsmanModal: React.FC<CraftsmanModalProps> = ({
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as CraftsmanStatus)}
-                className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-hidden focus:border-amber-500"
+                className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2 text-base sm:text-sm text-white focus:outline-hidden focus:border-amber-500"
               >
                 {STATUSES.map((s) => (
                   <option key={s} value={s}>
@@ -182,7 +183,7 @@ export const CraftsmanModal: React.FC<CraftsmanModalProps> = ({
                 max="10"
                 value={assistantCount}
                 onChange={(e) => setAssistantCount(Number(e.target.value))}
-                className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-hidden focus:border-amber-500 font-mono tabular-nums text-left"
+                className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2 text-base sm:text-sm text-white focus:outline-hidden focus:border-amber-500 font-mono tabular-nums text-left"
               />
             </div>
           </div>
@@ -220,7 +221,7 @@ export const CraftsmanModal: React.FC<CraftsmanModalProps> = ({
               value={termsText}
               onChange={(e) => setTermsText(e.target.value)}
               placeholder="مثلاً:&#10;الاستلام بميزان ليزر وقدة ألمونيوم&#10;الكبس بالبار على حساب الصنايعي&#10;نظافة الشقة بعد الانتهاء"
-              className="w-full bg-neutral-800 border border-neutral-700 rounded-xl p-3 text-xs text-white focus:outline-hidden focus:border-amber-500 leading-relaxed font-sans"
+              className="w-full bg-neutral-800 border border-neutral-700 rounded-xl p-3 text-base sm:text-xs text-white focus:outline-hidden focus:border-amber-500 leading-relaxed font-sans"
             />
           </div>
 
@@ -234,12 +235,12 @@ export const CraftsmanModal: React.FC<CraftsmanModalProps> = ({
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="مثلاً: بيحب يشرب شاي بسكر خفيف، بيشتغل من 8 لـ 4، جاب معاه عدة نظيفة..."
-              className="w-full bg-neutral-800 border border-neutral-700 rounded-xl p-3 text-xs text-white focus:outline-hidden focus:border-amber-500 leading-relaxed font-sans"
+              className="w-full bg-neutral-800 border border-neutral-700 rounded-xl p-3 text-base sm:text-xs text-white focus:outline-hidden focus:border-amber-500 leading-relaxed font-sans"
             />
           </div>
 
           {/* Form Submit Footer */}
-          <div className="pt-4 border-t border-neutral-800 flex items-center justify-end gap-3">
+          <div className="pt-3 pb-[max(0.5rem,env(safe-area-inset-bottom))] border-t border-neutral-800 flex items-center justify-end gap-3">
             <button
               type="button"
               onClick={onClose}
@@ -249,7 +250,7 @@ export const CraftsmanModal: React.FC<CraftsmanModalProps> = ({
             </button>
             <button
               type="submit"
-              className="px-5 py-2.5 text-xs font-bold text-neutral-900 bg-amber-400 hover:bg-amber-300 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="px-5 py-2.5 text-xs font-bold text-neutral-900 bg-amber-400 hover:bg-amber-300 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs active:scale-95"
             >
               <Check className="w-4 h-4" />
               <span>{craftsman ? 'حفظ التعديلات' : 'إضافة الصنايعي'}</span>

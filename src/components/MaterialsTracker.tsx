@@ -179,14 +179,31 @@ export const MaterialsTracker: React.FC<MaterialsTrackerProps> = ({
         ))}
       </div>
 
-      {/* Materials Cards List */}
+      {/* Materials Cards List or Empty State */}
       {filteredMaterials.length === 0 ? (
-        <div className="p-12 text-center rounded-2xl bg-neutral-900/60 border border-neutral-800 space-y-2">
-          <Layers className="w-9 h-9 text-neutral-600 mx-auto" />
-          <h4 className="text-sm font-semibold text-neutral-300">لا توجد خامات مسجلة في هذا البند</h4>
-          <p className="text-xs text-neutral-500 max-w-sm mx-auto">
-            سجل فواتير السباكة، الكهرباء، المحارة، والسيراميك لحساب تكلفة التشطيب الإجمالية بدقة.
+        <div className="p-8 sm:p-14 text-center rounded-2xl bg-neutral-900/60 border border-neutral-800 space-y-3.5">
+          <Layers className="w-12 h-12 text-neutral-600 mx-auto" />
+          <h4 className="text-base font-bold text-white">
+            {materials.length === 0
+              ? 'لم يتم تسجيل أي فواتير خامات أو مشتريات بعد'
+              : 'لا توجد خامات مطابقة لمعايير البحث في هذا البند'}
+          </h4>
+          <p className="text-xs text-neutral-400 max-w-md mx-auto leading-relaxed">
+            {materials.length === 0
+              ? 'سجل فواتير الموانين ومحلات السباكة، الكهرباء، والمحارة لحساب تكلفة الشقة ومتابعة ما تم توريده وتشوينه.'
+              : 'جرب اختيار تصنيف آخر من الشريط بالأعلى أو مسح نص البحث.'}
           </p>
+          {materials.length === 0 && (
+            <div className="pt-2">
+              <button
+                onClick={onAddMaterial}
+                className="px-5 py-2.5 text-xs font-bold text-neutral-950 bg-amber-400 hover:bg-amber-300 rounded-xl transition-all cursor-pointer inline-flex items-center gap-2 shadow-xs active:scale-95"
+              >
+                <Plus className="w-4 h-4" />
+                <span>إضافة أول فاتورة خامات</span>
+              </button>
+            </div>
+          )}
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

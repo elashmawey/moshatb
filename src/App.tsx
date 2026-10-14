@@ -23,6 +23,7 @@ import { PaymentModal } from './components/PaymentModal';
 import { MaterialModal } from './components/MaterialModal';
 import { ReceiptModal } from './components/ReceiptModal';
 import { WhatsAppTemplatesModal } from './components/WhatsAppTemplatesModal';
+import { PWAInstallBanner } from './components/PWAInstallBanner';
 
 import heroRenovationImage from './assets/images/renovation_apartment_hero_1791983131680.jpg';
 import {
@@ -185,6 +186,9 @@ export default function App() {
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100 flex flex-col antialiased selection:bg-amber-400/20 selection:text-amber-200">
       
+      {/* PWA Offline / Install Banner */}
+      <PWAInstallBanner />
+
       {/* Top Navbar & Scoreboard */}
       <Header
         activeTab={activeTab}
@@ -208,7 +212,7 @@ export default function App() {
       />
 
       {/* Main Content Area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 space-y-4 sm:space-y-6">
         
         {/* Editorial Hero Strip (Visible in overview/craftsmen tab) */}
         {activeTab === 'craftsmen' && (
@@ -216,31 +220,31 @@ export default function App() {
             <div className="grid grid-cols-1 lg:grid-cols-12 items-stretch">
               
               {/* Text side */}
-              <div className="lg:col-span-7 p-6 sm:p-8 flex flex-col justify-center space-y-4">
+              <div className="lg:col-span-7 p-4 sm:p-8 flex flex-col justify-center space-y-3 sm:space-y-4">
                 <div className="inline-flex items-center gap-2 text-xs font-semibold text-amber-400">
-                  <Sparkles className="w-4 h-4" />
+                  <Sparkles className="w-4 h-4 shrink-0" />
                   <span>دليلك اليومي لتشطيب شقتك بأعلى جودة وبأقل تكلفة</span>
                 </div>
-                <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white leading-tight text-balance">
+                <h1 className="text-lg sm:text-2xl lg:text-3xl font-extrabold text-white leading-snug sm:leading-tight text-balance">
                   إدارة شاملة لجميع الصنايعية والدفعات والاستلام الهندسي
                 </h1>
                 <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed max-w-xl">
                   تابع الأسطى السباك، الكهربائي، النقاش، وبتاع السيراميك والجبس بورد. وثّق كل دفعة وعربون، واطلع على شروط المعاينة والاستلام الهندسي لتضمن أن كل مليم تدفعه في مكانه الصحيح.
                 </p>
 
-                <div className="flex flex-wrap items-center gap-3 pt-2">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2.5 sm:gap-3 pt-2">
                   <button
                     onClick={() => {
                       setEditingCraftsman(null);
                       setCraftsmanModalOpen(true);
                     }}
-                    className="px-4 py-2.5 text-xs font-bold text-neutral-950 bg-amber-400 hover:bg-amber-300 rounded-xl transition-colors cursor-pointer shadow-xs"
+                    className="w-full sm:w-auto px-4 py-2.5 text-xs font-bold text-neutral-950 bg-amber-400 hover:bg-amber-300 rounded-xl transition-colors cursor-pointer shadow-xs text-center justify-center flex items-center"
                   >
                     + تسجيل صنايعي جديد
                   </button>
                   <button
                     onClick={() => setActiveTab('timeline')}
-                    className="px-4 py-2.5 text-xs font-semibold text-neutral-300 hover:text-white bg-neutral-800 hover:bg-neutral-700 rounded-xl transition-colors cursor-pointer"
+                    className="w-full sm:w-auto px-4 py-2.5 text-xs font-semibold text-neutral-300 hover:text-white bg-neutral-800 hover:bg-neutral-700 rounded-xl transition-colors cursor-pointer text-center justify-center flex items-center"
                   >
                     مراجعة مراحل التشطيب الـ 10
                   </button>
@@ -248,7 +252,7 @@ export default function App() {
               </div>
 
               {/* Photo side */}
-              <div className="lg:col-span-5 relative min-h-[220px] lg:min-h-full">
+              <div className="lg:col-span-5 relative min-h-[160px] sm:min-h-[220px] lg:min-h-full">
                 <img
                   src={heroRenovationImage}
                   alt="تشطيب شقة حديثة بأعلى معايير الجودة"

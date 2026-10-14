@@ -58,14 +58,14 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-xs">
-      <div className="relative w-full max-w-lg bg-neutral-900 border border-neutral-700 rounded-2xl shadow-2xl overflow-hidden text-neutral-100 animate-in fade-in zoom-in-95 duration-150">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-2 sm:p-4 bg-black/75 backdrop-blur-xs">
+      <div className="relative w-full max-w-lg bg-neutral-900 border border-neutral-700 rounded-t-3xl sm:rounded-2xl shadow-2xl overflow-hidden text-neutral-100 max-h-[92dvh] flex flex-col animate-in fade-in zoom-in-95 duration-150">
         
         {/* Modal Top Control Bar (Hidden in Print) */}
-        <div className="no-print flex items-center justify-between px-6 py-4 border-b border-neutral-800 bg-neutral-900/90">
-          <div className="flex items-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-amber-400" />
-            <h3 className="text-base font-semibold text-white">إيصال سداد مالي معتمد</h3>
+        <div className="no-print flex items-center justify-between px-3.5 sm:px-6 py-3 sm:py-4 border-b border-neutral-800 bg-neutral-900/90 shrink-0">
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" />
+            <h3 className="text-xs sm:text-base font-semibold text-white">إيصال سداد مالي</h3>
           </div>
           <div className="flex items-center gap-2">
             <button
@@ -103,7 +103,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
         </div>
 
         {/* Printable Receipt Paper Container */}
-        <div className="p-6 md:p-8 bg-neutral-900 border-neutral-800" id="printable-receipt">
+        <div className="p-4 sm:p-6 md:p-8 bg-neutral-900 border-neutral-800 overflow-y-auto flex-1" id="printable-receipt">
           {/* Header */}
           <div className="border-b border-dashed border-neutral-700 pb-5 mb-5 text-center">
             <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/10 text-amber-400 mb-3 border border-amber-500/30">

@@ -144,21 +144,29 @@ export const CraftsmenList: React.FC<CraftsmenListProps> = ({
         ))}
       </div>
 
-      {/* Craftsmen Grid */}
+      {/* Craftsmen Grid or Empty State */}
       {filtered.length === 0 ? (
-        <div className="p-12 text-center rounded-2xl bg-neutral-900/60 border border-neutral-800 space-y-3">
-          <UserCheck className="w-10 h-10 text-neutral-600 mx-auto" />
-          <h4 className="text-sm font-semibold text-neutral-300">لا يوجد صنايعية في هذا التصنيف</h4>
-          <p className="text-xs text-neutral-500 max-w-sm mx-auto">
-            يمكنك إضافة صنايعي جديد وتحديد مهنته والمصنعية المتفق عليها وشروط الاستلام.
+        <div className="p-8 sm:p-14 text-center rounded-2xl bg-neutral-900/60 border border-neutral-800 space-y-3.5">
+          <UserCheck className="w-12 h-12 text-neutral-600 mx-auto" />
+          <h4 className="text-base font-bold text-white">
+            {craftsmen.length === 0
+              ? 'ابدأ بتسجيل أول صنايعي في الشقة!'
+              : 'لا يوجد صنايعية مطابقين لمعايير البحث في هذا التصنيف'}
+          </h4>
+          <p className="text-xs text-neutral-400 max-w-md mx-auto leading-relaxed">
+            {craftsmen.length === 0
+              ? 'سجل الأسطى السباك، الكهربائي، أو النقاش لتسجيل المصنعية المتفق عليها وبنود الاستلام، وبدء توثيق الدفعات وسندات الصرف.'
+              : 'جرب اختيار تصنيف آخر من الشريط بالأعلى أو مسح نص البحث.'}
           </p>
-          <button
-            onClick={onAddCraftsman}
-            className="px-4 py-2 text-xs font-medium text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 rounded-xl transition-colors cursor-pointer inline-flex items-center gap-1.5"
-          >
-            <Plus className="w-3.5 h-3.5" />
-            <span>إضافة أول صنايعي</span>
-          </button>
+          <div className="pt-2">
+            <button
+              onClick={onAddCraftsman}
+              className="px-5 py-2.5 text-xs font-bold text-neutral-950 bg-amber-400 hover:bg-amber-300 rounded-xl transition-all cursor-pointer inline-flex items-center gap-2 shadow-xs active:scale-95"
+            >
+              <Plus className="w-4 h-4" />
+              <span>{craftsmen.length === 0 ? 'تسجيل أول صنايعي الآن' : 'إضافة صنايعي جديد'}</span>
+            </button>
+          </div>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">

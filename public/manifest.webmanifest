@@ -1,0 +1,28 @@
+{
+  "name": "مشطّب - إدارة تشطيب الشقة والصنايعية",
+  "short_name": "مشطّب",
+  "description": "تطبيق متكامل لمتابعة صنايعية تشطيب الشقة والدفعات والمشتريات ومراحل التسليم أوفلاين بدون إنترنت.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
+  "dir": "rtl",
+  "lang": "ar",
+  "categories": ["utilities", "productivity", "business"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

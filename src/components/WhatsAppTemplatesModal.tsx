@@ -99,14 +99,14 @@ export const WhatsAppTemplatesModal: React.FC<WhatsAppTemplatesModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-xs">
-      <div className="relative w-full max-w-xl bg-neutral-900 border border-neutral-700 rounded-2xl shadow-2xl overflow-hidden text-neutral-100 animate-in fade-in zoom-in-95 duration-150">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-2 sm:p-4 bg-black/75 backdrop-blur-xs">
+      <div className="relative w-full max-w-xl bg-neutral-900 border border-neutral-700 rounded-t-3xl sm:rounded-2xl shadow-2xl overflow-hidden text-neutral-100 max-h-[92dvh] flex flex-col animate-in fade-in zoom-in-95 duration-150">
         
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-800 bg-neutral-900/90">
+        <div className="flex items-center justify-between px-4 sm:px-6 py-3.5 sm:py-4 border-b border-neutral-800 bg-neutral-900/90 shrink-0">
           <div className="flex items-center gap-2">
             <MessageSquare className="w-5 h-5 text-emerald-400" />
-            <h3 className="text-base font-semibold text-white">رسائل واتساب السريعة للصنايعية</h3>
+            <h3 className="text-sm sm:text-base font-semibold text-white">رسائل واتساب السريعة للصنايعية</h3>
           </div>
           <button
             onClick={onClose}
@@ -119,15 +119,21 @@ export const WhatsAppTemplatesModal: React.FC<WhatsAppTemplatesModalProps> = ({
 
         {/* Content */}
         {craftsmen.length === 0 ? (
-          <div className="p-8 text-center space-y-3">
+          <div className="p-8 text-center space-y-3.5">
             <AlertCircle className="w-10 h-10 text-amber-400 mx-auto" />
             <p className="text-sm font-semibold text-neutral-200">لم يتم تسجيل أي صنايعية بعد</p>
-            <p className="text-xs text-neutral-400">
+            <p className="text-xs text-neutral-400 max-w-sm mx-auto leading-relaxed">
               يرجى إضافة صنايعي أولاً وتدوين رقم هاتفه لاستخدام قوالب رسائل الواتساب الجاهزة.
             </p>
+            <button
+              onClick={onClose}
+              className="px-4 py-2 text-xs font-bold text-neutral-950 bg-amber-400 hover:bg-amber-300 rounded-xl transition-colors cursor-pointer shadow-xs"
+            >
+              الرجوع لتسجيل صنايعي
+            </button>
           </div>
         ) : (
-          <div className="p-6 space-y-5">
+          <div className="p-4 sm:p-6 space-y-4 sm:space-y-5 overflow-y-auto flex-1">
             {/* Select Craftsman */}
             <div>
               <label className="block text-xs font-medium text-neutral-300 mb-1.5">
@@ -136,7 +142,7 @@ export const WhatsAppTemplatesModal: React.FC<WhatsAppTemplatesModalProps> = ({
               <select
                 value={craftsmanId}
                 onChange={(e) => setCraftsmanId(e.target.value)}
-                className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-hidden focus:border-amber-500"
+                className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2 text-base sm:text-sm text-white focus:outline-hidden focus:border-amber-500"
               >
                 {craftsmen.map((c) => (
                   <option key={c.id} value={c.id}>
@@ -151,7 +157,7 @@ export const WhatsAppTemplatesModal: React.FC<WhatsAppTemplatesModalProps> = ({
               <label className="block text-xs font-medium text-neutral-300 mb-2">
                 نوع الرسالة:
               </label>
-              <div className="grid grid-cols-2 gap-2 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                 {messageTemplates.map((tpl) => (
                   <button
                     key={tpl.id}
@@ -181,7 +187,7 @@ export const WhatsAppTemplatesModal: React.FC<WhatsAppTemplatesModalProps> = ({
                   value={customParam}
                   onChange={(e) => setCustomParam(e.target.value)}
                   placeholder="مثال: 9 صباحاً"
-                  className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-hidden focus:border-amber-500"
+                  className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2 text-base sm:text-sm text-white focus:outline-hidden focus:border-amber-500"
                 />
               </div>
             )}
@@ -196,7 +202,7 @@ export const WhatsAppTemplatesModal: React.FC<WhatsAppTemplatesModalProps> = ({
                   value={customNote}
                   onChange={(e) => setCustomNote(e.target.value)}
                   placeholder="مثال: منسوب علبة المفتاح مائل سنتيمتر عن الباقي"
-                  className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-hidden focus:border-amber-500"
+                  className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2 text-base sm:text-sm text-white focus:outline-hidden focus:border-amber-500"
                 />
               </div>
             )}
@@ -209,7 +215,7 @@ export const WhatsAppTemplatesModal: React.FC<WhatsAppTemplatesModalProps> = ({
                 </label>
                 <span className="text-[11px] text-neutral-500">جاهزة للإرسال المباشر</span>
               </div>
-              <div className="p-4 bg-neutral-950 border border-neutral-800 rounded-xl text-neutral-200 text-xs sm:text-sm leading-relaxed whitespace-pre-wrap font-sans">
+              <div className="p-3.5 sm:p-4 bg-neutral-950 border border-neutral-800 rounded-xl text-neutral-200 text-xs sm:text-sm leading-relaxed whitespace-pre-wrap font-sans">
                 {messageText}
               </div>
             </div>
@@ -217,11 +223,11 @@ export const WhatsAppTemplatesModal: React.FC<WhatsAppTemplatesModalProps> = ({
         )}
 
         {/* Footer Actions */}
-        <div className="px-6 py-4 bg-neutral-950/80 border-t border-neutral-800 flex items-center justify-between gap-3">
+        <div className="px-4 sm:px-6 py-3 sm:py-4 bg-neutral-950/80 border-t border-neutral-800 flex items-center justify-between gap-2.5 shrink-0 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
           <button
             onClick={handleCopy}
             disabled={!messageText}
-            className="px-4 py-2.5 text-xs font-semibold text-neutral-200 bg-neutral-800 hover:bg-neutral-700 disabled:opacity-50 border border-neutral-700 rounded-xl flex items-center gap-2 transition-colors cursor-pointer"
+            className="px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs font-semibold text-neutral-200 bg-neutral-800 hover:bg-neutral-700 disabled:opacity-50 border border-neutral-700 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer"
           >
             {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
             <span>{copied ? 'تم النسخ!' : 'نسخ الرسالة'}</span>
@@ -230,17 +236,17 @@ export const WhatsAppTemplatesModal: React.FC<WhatsAppTemplatesModalProps> = ({
           <div className="flex items-center gap-2">
             <button
               onClick={onClose}
-              className="px-4 py-2.5 text-xs font-semibold text-neutral-400 hover:text-white transition-colors cursor-pointer"
+              className="px-3 py-2 text-xs font-semibold text-neutral-400 hover:text-white transition-colors cursor-pointer"
             >
               إلغاء
             </button>
             <button
               onClick={handleOpenWhatsApp}
               disabled={!activeCraftsman}
-              className="px-5 py-2.5 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 rounded-xl flex items-center gap-2 shadow-xs transition-colors cursor-pointer"
+              className="px-4 sm:px-5 py-2 sm:py-2.5 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 rounded-xl flex items-center gap-1.5 shadow-xs transition-colors cursor-pointer active:scale-95"
             >
               <Send className="w-4 h-4" />
-              <span>إرسال واتساب الآن</span>
+              <span>إرسال واتساب</span>
             </button>
           </div>
         </div>

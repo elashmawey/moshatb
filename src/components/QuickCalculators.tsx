@@ -49,10 +49,10 @@ export const QuickCalculators: React.FC = () => {
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 overflow-x-auto pb-1.5 scrollbar-none">
         <button
           onClick={() => setActiveTab('paint')}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+          className={`flex items-center gap-2 px-3.5 sm:px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 ${
             activeTab === 'paint'
               ? 'bg-amber-400 text-neutral-950 shadow-xs'
               : 'bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-white'
@@ -64,7 +64,7 @@ export const QuickCalculators: React.FC = () => {
 
         <button
           onClick={() => setActiveTab('tiles')}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+          className={`flex items-center gap-2 px-3.5 sm:px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 ${
             activeTab === 'tiles'
               ? 'bg-amber-400 text-neutral-950 shadow-xs'
               : 'bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-white'
@@ -76,7 +76,7 @@ export const QuickCalculators: React.FC = () => {
 
         <button
           onClick={() => setActiveTab('electric')}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+          className={`flex items-center gap-2 px-3.5 sm:px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 ${
             activeTab === 'electric'
               ? 'bg-amber-400 text-neutral-950 shadow-xs'
               : 'bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-white'
@@ -101,7 +101,7 @@ export const QuickCalculators: React.FC = () => {
                 max="500"
                 value={aptArea}
                 onChange={(e) => setAptArea(Number(e.target.value) || 0)}
-                className="w-36 bg-neutral-950 border border-neutral-700 rounded-xl px-3.5 py-2.5 text-sm text-white font-mono tabular-nums text-left focus:outline-hidden focus:border-amber-500"
+                className="w-36 bg-neutral-950 border border-neutral-700 rounded-xl px-3.5 py-2.5 text-base sm:text-sm text-white font-mono tabular-nums text-left focus:outline-hidden focus:border-amber-500"
               />
               <span className="text-xs text-neutral-400">
                 مساحة الحوائط التقريبية: <strong className="text-amber-400 font-mono">{estimatedWallArea.toFixed(0)} م2</strong>
@@ -158,7 +158,7 @@ export const QuickCalculators: React.FC = () => {
                 max="500"
                 value={tileFloorArea}
                 onChange={(e) => setTileFloorArea(Number(e.target.value) || 0)}
-                className="w-full bg-neutral-950 border border-neutral-700 rounded-xl px-3.5 py-2.5 text-sm text-white font-mono tabular-nums text-left focus:outline-hidden focus:border-amber-500"
+                className="w-full bg-neutral-950 border border-neutral-700 rounded-xl px-3.5 py-2.5 text-base sm:text-sm text-white font-mono tabular-nums text-left focus:outline-hidden focus:border-amber-500"
               />
             </div>
 
@@ -169,7 +169,7 @@ export const QuickCalculators: React.FC = () => {
               <select
                 value={wastePercent}
                 onChange={(e) => setWastePercent(Number(e.target.value))}
-                className="w-full bg-neutral-950 border border-neutral-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-hidden focus:border-amber-500"
+                className="w-full bg-neutral-950 border border-neutral-700 rounded-xl px-3.5 py-2.5 text-base sm:text-sm text-white focus:outline-hidden focus:border-amber-500"
               >
                 <option value={5}>5% (تركيب عدل ومساحة منتظمة)</option>
                 <option value={8}>8% (متوسط وموصى به)</option>
@@ -227,7 +227,7 @@ export const QuickCalculators: React.FC = () => {
                 max="10"
                 value={roomCount}
                 onChange={(e) => setRoomCount(Number(e.target.value) || 1)}
-                className="w-full bg-neutral-950 border border-neutral-700 rounded-xl px-3.5 py-2.5 text-sm text-white font-mono tabular-nums text-left focus:outline-hidden focus:border-amber-500"
+                className="w-full bg-neutral-950 border border-neutral-700 rounded-xl px-3.5 py-2.5 text-base sm:text-sm text-white font-mono tabular-nums text-left focus:outline-hidden focus:border-amber-500"
               />
             </div>
 
@@ -241,7 +241,7 @@ export const QuickCalculators: React.FC = () => {
                 max="8"
                 value={acCount}
                 onChange={(e) => setAcCount(Number(e.target.value) || 0)}
-                className="w-full bg-neutral-950 border border-neutral-700 rounded-xl px-3.5 py-2.5 text-sm text-white font-mono tabular-nums text-left focus:outline-hidden focus:border-amber-500"
+                className="w-full bg-neutral-950 border border-neutral-700 rounded-xl px-3.5 py-2.5 text-base sm:text-sm text-white font-mono tabular-nums text-left focus:outline-hidden focus:border-amber-500"
               />
             </div>
           </div>
