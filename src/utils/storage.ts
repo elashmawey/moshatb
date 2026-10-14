@@ -75,6 +75,8 @@ export const resetToDefaultData = () => {
   };
 };
 
-export const formatCurrency = (amount: number): string => {
-  return `${amount.toLocaleString('ar-EG')} ج.م`;
+export const formatCurrency = (amount: number | string | undefined | null): string => {
+  const numeric = typeof amount === 'number' ? amount : parseFloat(String(amount || 0));
+  const safeNum = isNaN(numeric) ? 0 : numeric;
+  return `${safeNum.toLocaleString('ar-EG')} ج.م`;
 };

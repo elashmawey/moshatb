@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Craftsman, Payment } from '../types';
 import { formatCurrency } from '../utils/storage';
-import { X, Check, DollarSign, AlertCircle } from 'lucide-react';
+import { X, Check, DollarSign, AlertCircle, UserPlus } from 'lucide-react';
 
 interface PaymentModalProps {
   craftsmen: Craftsman[];
@@ -9,7 +9,16 @@ interface PaymentModalProps {
   payments: Payment[];
   onSave: (payment: Payment) => void;
   onClose: () => void;
+  onOpenAddCraftsman?: () => void;
 }
+
+// Convert any Arabic-Indic numerals or formatted numbers to clean standard digits
+const normalizeArabicNumbers = (val: string | number): string => {
+  return String(val ?? '')
+    .replace(/[٠-٩]/g, (d) => '٠١٢٣٤٥٦٧٨٩'.indexOf(d).toString())
+    .replace(/[٫,]/g, '.')
+    .replace(/[^0-9.]/g, '');
+};
 
 export const PaymentModal: React.FC<PaymentModalProps> = ({
   craftsmen,
@@ -17,24 +26,36 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
   payments,
   onSave,
   onClose,
+  onOpenAddCraftsman,
 }) => {
   const [craftsmanId, setCraftsmanId] = useState<string>(
     selectedCraftsmanId || (craftsmen.length > 0 ? craftsmen[0].id : '')
   );
-  const [amount, setAmount] = useState<number>(3000);
+  const [amount, setAmount] = useState<string>('3000');
   const [date, setDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [milestone, setMilestone] = useState<string>('عربون بدء مرحلة التأسيس');
   const [method, setMethod] = useState<'كاش' | 'فودافون كاش' | 'إنستاباي' | 'تحويل بنكي'>('كاش');
   const [notes, setNotes] = useState<string>('');
 
+  useEffect(() => {
+    if (selectedCraftsmanId) {
+      setCraftsmanId(selectedCraftsmanId);
+    } else if (!craftsmanId && craftsmen.length > 0) {
+      setCraftsmanId(craftsmen[0].id);
+    }
+  }, [selectedCraftsmanId, craftsmen, craftsmanId]);
+
   const currentCraftsman = craftsmen.find((c) => c.id === craftsmanId);
   const craftsmanPaidAlready = payments
     .filter((p) => p.craftsmanId === craftsmanId)
-    .reduce((sum, p) => sum + p.amount, 0);
+    .reduce((sum, p) => sum + (Number(p.amount) || 0), 0);
 
+  const numericAmount = parseFloat(normalizeArabicNumbers(amount)) || 0;
   const agreed = currentCraftsman?.agreedAmount || 0;
   const currentRemaining = Math.max(0, agreed - craftsmanPaidAlready);
-  const newRemaining = Math.max(0, currentRemaining - amount);
+  const newRemaining = Math.max(0, currentRemaining - numericAmount);
+
+  const quickAmounts = [500, 1000, 2000, 3000, 5000, 10000];
 
   const quickMilestones = [
     'عربون بدء العمل وتثبيت الموعد',
@@ -52,8 +73,10 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
       alert('يرجى اختيار الصنايعي أولاً');
       return;
     }
-    if (!amount || amount <= 0) {
-      alert('يرجى إدخال مبلغ صحيح');
+
+    const cleanAmount = parseFloat(normalizeArabicNumbers(amount));
+    if (isNaN(cleanAmount) || cleanAmount <= 0) {
+      alert('يرجى إدخال مبلغ صحيح أكبر من صفر');
       return;
     }
 
@@ -69,7 +92,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
     const newPayment: Payment = {
       id: `p-${Date.now()}`,
       craftsmanId,
-      amount: Number(amount),
+      amount: cleanAmount,
       date,
       milestone: milestone.trim(),
       method,
@@ -106,12 +129,28 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
             <p className="text-xs text-neutral-400 max-w-sm mx-auto leading-relaxed">
               لتسجيل دفعة مالية أو عربون، يجب عليك أولاً إضافة صنايعي (سباك، كهربائي، نقاش...) لتحديد المصنعية وإصدار سند الصرف باسمه.
             </p>
-            <button
-              onClick={onClose}
-              className="px-5 py-2.5 text-xs font-bold text-neutral-950 bg-amber-400 hover:bg-amber-300 rounded-xl transition-colors cursor-pointer shadow-xs"
-            >
-              الرجوع لإضافة صنايعي
-            </button>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-2 pt-2">
+              {onOpenAddCraftsman && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClose();
+                    onOpenAddCraftsman();
+                  }}
+                  className="w-full sm:w-auto px-5 py-2.5 text-xs font-bold text-neutral-950 bg-amber-400 hover:bg-amber-300 rounded-xl transition-colors cursor-pointer shadow-xs flex items-center justify-center gap-2"
+                >
+                  <UserPlus className="w-4 h-4" />
+                  <span>+ إضافة صنايعي جديد الآن</span>
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={onClose}
+                className="w-full sm:w-auto px-4 py-2.5 text-xs font-semibold text-neutral-400 hover:text-white transition-colors cursor-pointer"
+              >
+                إغلاق
+              </button>
+            </div>
           </div>
         ) : (
           /* Form Body */
@@ -163,18 +202,36 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div>
                 <label className="block text-xs font-medium text-neutral-300 mb-1">
-                  مبلغ الدفعة (ج.م):
+                  مبلغ الدفعة أو العربون (ج.م):
                 </label>
                 <input
                   type="number"
-                  min="1"
-                  step="50"
+                  inputMode="decimal"
+                  min="0.01"
+                  step="any"
                   required
                   value={amount}
-                  onChange={(e) => setAmount(Number(e.target.value))}
-                  placeholder="5000"
+                  onChange={(e) => setAmount(e.target.value)}
+                  placeholder="مثلاً: 5000"
                   className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2 text-base sm:text-sm text-white focus:outline-hidden focus:border-emerald-500 font-mono tabular-nums text-left"
                 />
+                {/* Quick Amount Chips */}
+                <div className="flex flex-wrap gap-1.5 mt-2">
+                  {quickAmounts.map((q) => (
+                    <button
+                      type="button"
+                      key={q}
+                      onClick={() => setAmount(String(q))}
+                      className={`text-[10px] sm:text-[11px] px-2 py-1 rounded-lg border transition-colors cursor-pointer ${
+                        String(amount) === String(q)
+                          ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 font-bold'
+                          : 'bg-neutral-800/80 hover:bg-neutral-700 text-neutral-400 border-neutral-700'
+                      }`}
+                    >
+                      {q.toLocaleString('ar-EG')}
+                    </button>
+                  ))}
+                </div>
               </div>
 
               <div>

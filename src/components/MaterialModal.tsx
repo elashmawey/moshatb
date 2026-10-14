@@ -22,19 +22,29 @@ const TRADES: TradeType[] = [
 
 const UNITS = ['شيكارة', 'لفة', 'متر', 'بستلة', 'لوح', 'قطعة', 'طن', 'مقطورة', 'طلبية كاملة'];
 
+// Convert any Arabic-Indic numerals or formatted numbers to clean standard digits
+const normalizeArabicNumbers = (val: string | number): string => {
+  return String(val ?? '')
+    .replace(/[٠-٩]/g, (d) => '٠١٢٣٤٥٦٧٨٩'.indexOf(d).toString())
+    .replace(/[٫,]/g, '.')
+    .replace(/[^0-9.]/g, '');
+};
+
 export const MaterialModal: React.FC<MaterialModalProps> = ({ onSave, onClose }) => {
   const [trade, setTrade] = useState<TradeType>('كهرباء');
   const [itemName, setItemName] = useState('');
-  const [quantity, setQuantity] = useState<number>(1);
+  const [quantity, setQuantity] = useState<string | number>(1);
   const [unit, setUnit] = useState<string>('لفة');
-  const [unitPrice, setUnitPrice] = useState<number>(500);
+  const [unitPrice, setUnitPrice] = useState<string | number>(500);
   const [supplierName, setSupplierName] = useState('');
   const [supplierPhone, setSupplierPhone] = useState('');
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [isDelivered, setIsDelivered] = useState(true);
   const [notes, setNotes] = useState('');
 
-  const totalAmount = (Number(quantity) || 0) * (Number(unitPrice) || 0);
+  const numQty = parseFloat(normalizeArabicNumbers(quantity)) || 0;
+  const numPrice = parseFloat(normalizeArabicNumbers(unitPrice)) || 0;
+  const totalAmount = numQty * numPrice;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,13 +53,18 @@ export const MaterialModal: React.FC<MaterialModalProps> = ({ onSave, onClose })
       return;
     }
 
+    if (numQty <= 0) {
+      alert('يرجى إدخال كمية صحيحة أكبر من صفر');
+      return;
+    }
+
     const newMaterial: MaterialExpense = {
       id: `m-${Date.now()}`,
       trade,
       itemName: itemName.trim(),
-      quantity: Number(quantity) || 1,
+      quantity: numQty,
       unit,
-      unitPrice: Number(unitPrice) || 0,
+      unitPrice: numPrice,
       totalAmount,
       supplierName: supplierName.trim() || 'محل تجاري',
       supplierPhone: supplierPhone.trim() || undefined,
@@ -136,11 +151,12 @@ export const MaterialModal: React.FC<MaterialModalProps> = ({ onSave, onClose })
               </label>
               <input
                 type="number"
-                min="0.1"
-                step="0.5"
+                inputMode="decimal"
+                min="0.001"
+                step="any"
                 required
                 value={quantity}
-                onChange={(e) => setQuantity(Number(e.target.value))}
+                onChange={(e) => setQuantity(e.target.value)}
                 className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3 py-2 text-base sm:text-sm text-white focus:outline-hidden focus:border-amber-500 font-mono tabular-nums text-left"
               />
             </div>
@@ -168,11 +184,12 @@ export const MaterialModal: React.FC<MaterialModalProps> = ({ onSave, onClose })
               </label>
               <input
                 type="number"
+                inputMode="decimal"
                 min="0"
-                step="1"
+                step="any"
                 required
                 value={unitPrice}
-                onChange={(e) => setUnitPrice(Number(e.target.value))}
+                onChange={(e) => setUnitPrice(e.target.value)}
                 className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3 py-2 text-base sm:text-sm text-white focus:outline-hidden focus:border-amber-500 font-mono tabular-nums text-left"
               />
             </div>

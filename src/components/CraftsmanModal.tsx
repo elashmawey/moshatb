@@ -24,6 +24,14 @@ const TRADES: TradeType[] = [
 
 const STATUSES: CraftsmanStatus[] = ['لم يبدأ', 'قيد العمل', 'معلق', 'مكتمل ومستلم'];
 
+// Convert any Arabic-Indic numerals or formatted numbers to clean standard digits
+const normalizeArabicNumbers = (val: string | number): string => {
+  return String(val ?? '')
+    .replace(/[٠-٩]/g, (d) => '٠١٢٣٤٥٦٧٨٩'.indexOf(d).toString())
+    .replace(/[٫,]/g, '.')
+    .replace(/[^0-9.]/g, '');
+};
+
 export const CraftsmanModal: React.FC<CraftsmanModalProps> = ({
   craftsman,
   onSave,
@@ -32,7 +40,9 @@ export const CraftsmanModal: React.FC<CraftsmanModalProps> = ({
   const [name, setName] = useState(craftsman?.name || '');
   const [trade, setTrade] = useState<TradeType>(craftsman?.trade || 'سباكة');
   const [phone, setPhone] = useState(craftsman?.phone || '');
-  const [agreedAmount, setAgreedAmount] = useState<number>(craftsman?.agreedAmount || 0);
+  const [agreedAmount, setAgreedAmount] = useState<number | string>(
+    craftsman ? craftsman.agreedAmount : ''
+  );
   const [status, setStatus] = useState<CraftsmanStatus>(craftsman?.status || 'لم يبدأ');
   const [rating, setRating] = useState<number>(craftsman?.rating || 5);
   const [notes, setNotes] = useState(craftsman?.notes || '');
@@ -53,12 +63,14 @@ export const CraftsmanModal: React.FC<CraftsmanModalProps> = ({
       .map((t) => t.trim())
       .filter((t) => t.length > 0);
 
+    const parsedAgreed = parseFloat(normalizeArabicNumbers(agreedAmount));
+
     const savedCraftsman: Craftsman = {
       id: craftsman ? craftsman.id : `c-${Date.now()}`,
       name: name.trim(),
       trade,
       phone: phone.trim() || '01000000000',
-      agreedAmount: Number(agreedAmount) || 0,
+      agreedAmount: isNaN(parsedAgreed) ? 0 : parsedAgreed,
       status,
       rating,
       notes: notes.trim(),
@@ -145,10 +157,11 @@ export const CraftsmanModal: React.FC<CraftsmanModalProps> = ({
               </label>
               <input
                 type="number"
+                inputMode="decimal"
                 min="0"
-                step="100"
+                step="any"
                 value={agreedAmount}
-                onChange={(e) => setAgreedAmount(Number(e.target.value))}
+                onChange={(e) => setAgreedAmount(e.target.value)}
                 placeholder="20000"
                 className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2 text-base sm:text-sm text-white focus:outline-hidden focus:border-amber-500 font-mono tabular-nums text-left"
               />

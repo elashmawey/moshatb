@@ -370,6 +370,10 @@ export default function App() {
             setPaymentModalOpen(false);
             setPaymentCraftsmanId(undefined);
           }}
+          onOpenAddCraftsman={() => {
+            setEditingCraftsman(null);
+            setCraftsmanModalOpen(true);
+          }}
         />
       )}
 
